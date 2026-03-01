@@ -6,18 +6,13 @@ define('CHANNEL_SALT', 'a6fa2445e156106c');
 define('FINGERPRINT', '1920x1080en-US'); // Hardcoded fingerprint
 define('BASE_URL', 'https://chevy.vovlacosa.sbs/proxy/top1/cdn/' . CHANNEL_KEY . '/');
 
-// --- Authentication Logic (ported from previous analysis) ---
+// --- Authentication Logic ---
 
-/**
- * Computes the Proof-of-Work nonce required by the server.
- * The logic is based on the deobfuscated JavaScript.
- */
 function compute_pow_nonce($path, $timestamp) {
     $hmac_hash = hash_hmac('sha256', CHANNEL_KEY, CHANNEL_SALT);
     for ($nonce = 0; $nonce < 100000; $nonce++) {
         $message = "{$hmac_hash}" . CHANNEL_KEY . "{$path}{$timestamp}{$nonce}";
         $md5_hash = md5($message);
-        // The server expects the first 4 hex digits of the hash to be less than 4096 (0x1000)
         if (hexdec(substr($md5_hash, 0, 4)) < 4096) {
             return $nonce;
         }
@@ -25,135 +20,82 @@ function compute_pow_nonce($path, $timestamp) {
     return 99999; // Fallback nonce
 }
 
-/**
- * Generates the X-Auth-Token required by the server.
- * The logic is based on the deobfuscated JavaScript.
- */
 function generate_auth_token($path, $timestamp) {
     $message = CHANNEL_KEY . "|{$path}|{$timestamp}|" . FINGERPRINT;
     $hash = hash_hmac('sha256', $message, CHANNEL_SALT);
     return substr($hash, 0, 16); // The token is the first 16 chars of the hash
 }
 
+// --- Link Generation Logic ---
 
-// --- Proxy Logic ---
+// The target resource
+$resource = 'mono.m3u8';
+$auth_path = $resource;
 
-if (isset($_GET['resource'])) {
-    $resource = $_GET['resource'];
-    $auth_path = $resource; // The path used for authentication is the resource file name
+// Generate auth values
+$timestamp = time();
+$nonce = compute_pow_nonce($auth_path, $timestamp);
+$auth_token = generate_auth_token($auth_path, $timestamp);
 
-    $timestamp = time();
-    $nonce = compute_pow_nonce($auth_path, $timestamp);
-    $auth_token = generate_auth_token($auth_path, $timestamp);
+// The full URL to fetch
+$full_url = BASE_URL . $resource;
 
-    // Prepare the authentication headers
-    $headers = [
-        'X-Timestamp: ' . $timestamp,
-        'X-Nonce: ' . $nonce,
-        'X-Auth-Token: ' . $auth_token,
-        'X-Fingerprint: ' . FINGERPRINT,
-        'X-Country-Code: US' // A country code is also required
-    ];
+// The headers to send
+$headers = [
+    'X-Timestamp' => $timestamp,
+    'X-Nonce' => $nonce,
+    'X-Auth-Token' => $auth_token,
+    'X-Fingerprint' => FINGERPRINT,
+    'X-Country-Code' => 'US'
+];
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, BASE_URL . $resource);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    
-    // Forward the user's User-Agent for good measure
-    if(isset($_SERVER['HTTP_USER_AGENT'])) {
-        curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-    }
-
-    $content = curl_exec($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-    curl_close($ch);
-
-    // If the upstream server returns an error, pass it along
-    if ($http_code != 200) {
-        http_response_code($http_code > 0 ? $http_code : 500);
-        echo "Upstream error: {$http_code}\n";
-        echo $content;
-        exit;
-    }
-
-    // For HLS playlists, all segment/sub-playlist URLs must be rewritten 
-    // to point back to this proxy script.
-    if (pathinfo($resource, PATHINFO_EXTENSION) === 'm3u8') {
-        $content = preg_replace('/^(.*\\.ts)$/m', 'index.php?resource=$1', $content);
-        $content = preg_replace('/^(.*\\.m3u8)$/m', 'index.php?resource=$1', $content);
-    }
-
-    // Pass back the correct Content-Type and the actual content
-    header('Content-Type: ' . $content_type);
-    echo $content;
-    exit;
-}
-
-// --- HTML Player Page (served by default) ---
+// --- HTML Page to display the link and headers ---
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PHP Video Stream Proxy</title>
-    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
+    <title>Live Link Fetcher</title>
     <style>
         body { font-family: sans-serif; }
-        #stream-info {
-            margin-top: 20px;
+        .container { padding: 20px; }
+        h1, h2 { color: #333; }
+        .code-block {
+            background-color: #f5f5f5;
             padding: 15px;
             border: 1px solid #ccc;
-            background-color: #f5f5f5;
+            border-radius: 5px;
+            white-space: pre-wrap;
             word-wrap: break-word;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Live Stream Fetch Details</h1>
 
-<h1>Video Stream via PHP Proxy</h1>
-<video-js id="my-video" class="video-js" controls preload="auto" width="960" height="540" data-setup="{}">
-    <!-- The source points to this script to fetch the main playlist -->
-    <source src="index.php?resource=mono.m3u8" type="application/x-mpegURL">
-</video-js>
+        <p>The server requires custom authentication headers for every request. Here are the dynamically generated details to fetch the main playlist:</p>
 
-<div id="stream-info">
-    <strong>Live Fetched URL:</strong>
-    <span id="live-url">Waiting for stream to start...</span>
-</div>
+        <h2>Fetch URL</h2>
+        <div class="code-block"><?php echo htmlspecialchars($full_url); ?></div>
 
-<script src="https://vjs.zencdn.net/7.15.4/video.js"></script>
+        <h2>Required HTTP Headers</h2>
+        <div class="code-block"><?php
+        foreach ($headers as $key => $value) {
+            echo htmlspecialchars($key) . ": " . htmlspecialchars($value) . "<br>";
+        }
+        ?></div>
 
-<script>
-    // Expose the PHP base URL to JavaScript
-    const BASE_URL = '<?php echo BASE_URL; ?>';
-
-    (function() {
-        // Get the video.js player instance
-        const player = videojs('my-video');
-        const liveUrlElement = document.getElementById('live-url');
-
-        // This function runs just before any segment is requested
-        player.vhs.xhr.beforeRequest = function(options) {
-            
-            // The URI will be like "index.php?resource=..."
-            const requestUri = options.uri;
-            
-            // Extract the resource name from the URI
-            const urlParams = new URLSearchParams(requestUri.split('?')[1]);
-            const resource = urlParams.get('resource');
-
-            if (resource) {
-                // Construct the full upstream URL and display it
-                const fullUrl = BASE_URL + resource;
-                liveUrlElement.textContent = fullUrl;
+        <h2>Example cURL Command</h2>
+        <p>You can use this command in your terminal to verify:</p>
+        <div class="code-block"><?php
+            $curl_command = "curl -v -L ";
+            foreach ($headers as $key => $value) {
+                $curl_command .= "-H '" . htmlspecialchars($key, ENT_QUOTES) . ": " . htmlspecialchars($value, ENT_QUOTES) . "' ";
             }
-
-            // Return the original options to allow the request to proceed
-            return options;
-        };
-    })();
-</script>
-
+            $curl_command .= "'" . htmlspecialchars($full_url, ENT_QUOTES) . "'";
+            echo $curl_command;
+        ?></div>
+    </div>
 </body>
 </html>
