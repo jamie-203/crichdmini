@@ -1,8 +1,9 @@
 <?php
 
 // --- Configuration ---
-define('CHANNEL_KEY', 'premium603');
-define('CHANNEL_SALT', 'a6fa2445e156106c');
+// *** FIX: Use the correct channel key and salt from the new URL ***
+define('CHANNEL_KEY', 'stream370');
+define('CHANNEL_SALT', '19a32c25637651a2');
 define('FINGERPRINT', '1920x1080en-US');
 
 // --- Proxy Logic ---
@@ -64,8 +65,8 @@ if (isset($_GET['resource'])) {
 
     if ($http_code != 200) { http_response_code($http_code); exit("Upstream error: {$http_code}"); }
 
-    // *** FIX: Check for .m3u8 extension instead of .css ***
-    if (pathinfo($resource_path, PATHINFO_EXTENSION) === 'm3u8') {
+    // *** FIX: Revert to .css and handle the correct content type ***
+    if (pathinfo($resource_path, PATHINFO_EXTENSION) === 'css') {
         $content = preg_replace_callback(
             '/(#EXT-X-KEY:.*?URI=")([^"]+)(")/m',
             fn($m) => $m[1] . 'daddy.php?resource=' . ltrim(parse_url($m[2], PHP_URL_PATH), '/') . $m[3],
@@ -79,7 +80,7 @@ if (isset($_GET['resource'])) {
     exit;
 }
 
-// --- HTML Player Page with Logs and Info ---
+// --- HTML Player Page ---
 ?>
 <!DOCTYPE html>
 <html>
@@ -118,8 +119,8 @@ if (isset($_GET['resource'])) {
         const logsContainer = document.getElementById('logs');
         const urlContainer = document.getElementById('stream-url');
         
-        // *** FIX: Request mono.m3u8 for the video stream ***
-        const streamUrl = 'daddy.php?resource=mono.m3u8';
+        // *** FIX: Revert to mono.css ***
+        const streamUrl = 'daddy.php?resource=mono.css';
 
         urlContainer.textContent = streamUrl;
 
