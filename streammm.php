@@ -2,9 +2,9 @@
 error_reporting(0);
 
 // --------------------------------------------------------------------
-// Helper functions (keep original ones)
+// Helper functions (keep as is)
 function b64_to_hex($b64) {
-    return bin2hex($b64); // encodes the base64 string itself into hex (URL‑safe)
+    return bin2hex($b64);
 }
 
 function hex_to_b64($hex) {
@@ -12,7 +12,7 @@ function hex_to_b64($hex) {
     if (strlen($hex) % 2 !== 0) return false;
     $bin = hex2bin($hex);
     if ($bin === false) return false;
-    return $bin; // this is the original base64 string
+    return $bin;
 }
 
 function get_base($url) {
@@ -28,7 +28,6 @@ function get_base($url) {
 function to_abs($base, $rel) {
     if (preg_match("#^https?://#i", $rel)) return $rel;
     if (strpos($rel, "//") === 0) return "https:" . $rel;
-
     if (strpos($rel, "/") === 0) {
         $p = parse_url($base);
         $scheme = $p["scheme"] ?? "http";
@@ -36,7 +35,6 @@ function to_abs($base, $rel) {
         $port = isset($p["port"]) ? ":" . $p["port"] : "";
         return $scheme . "://" . $host . $port . $rel;
     }
-
     return $base . $rel;
 }
 
@@ -54,7 +52,6 @@ function curl_fetch($url, $extra_headers = []) {
     $headers = array_merge($required_headers, $extra_headers);
 
     $ch = curl_init();
-
     curl_setopt_array($ch, [
         CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
@@ -68,7 +65,6 @@ function curl_fetch($url, $extra_headers = []) {
     ]);
 
     $res = curl_exec($ch);
-
     if ($res === false) {
         curl_close($ch);
         return ["ok" => false];
@@ -76,9 +72,7 @@ function curl_fetch($url, $extra_headers = []) {
 
     $hs = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     $ct = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-
     $body = substr($res, $hs);
-
     curl_close($ch);
 
     return [
@@ -89,14 +83,14 @@ function curl_fetch($url, $extra_headers = []) {
 }
 
 // --------------------------------------------------------------------
-// CORS preflight
+// CORS headers (allow your website to access the proxy)
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: GET, OPTIONS");
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") exit;
 
 // --------------------------------------------------------------------
-// Parameter handling
+// Get parameters
 if (!isset($_GET["url"])) {
     http_response_code(400);
     die("Missing url");
@@ -117,7 +111,6 @@ if (preg_match('/^[0-9a-fA-F]+$/', $raw) && strlen($raw) > 20) {
     }
 }
 
-// If not hex‑encoded, treat as a normal (maybe already decoded) URL
 if ($url === "") {
     $url = urldecode($raw);
 }
@@ -140,7 +133,7 @@ $body = $r["body"];
 $ct = $r["ct"] ?? "";
 
 // --------------------------------------------------------------------
-// If it's a manifest (m3u8), rewrite it
+// If it's an HLS playlist (m3u8), rewrite it
 $is_m3u8 = false;
 if (!empty($ct) && stripos($ct, "mpegurl") !== false) $is_m3u8 = true;
 if (strpos($body, "#EXTM3U") !== false) $is_m3u8 = true;
@@ -163,7 +156,9 @@ if ($is_m3u8) {
             if (stripos($t, "#EXT-X-KEY") === 0 && preg_match('/URI="([^"]+)"/', $t, $m)) {
                 $key = $m[1];
                 $absKey = to_abs($base, $key);
-                $proxyKey = "?type=key&url=" . b64_to_hex(base64_encode($absKey));
+                // Use the current script URL as base for the rewritten URL
+                $proxyBase = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+                $proxyKey = $proxyBase . "?type=key&url=" . b64_to_hex(base64_encode($absKey));
                 $t = preg_replace('/URI="([^"]+)"/', 'URI="' . $proxyKey . '"', $t);
             }
             $out[] = $t;
@@ -172,7 +167,8 @@ if ($is_m3u8) {
 
         // This is a segment URL – rewrite it with type=segment
         $abs = to_abs($base, $t);
-        $out[] = "?type=segment&url=" . b64_to_hex(base64_encode($abs));
+        $proxyBase = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+        $out[] = $proxyBase . "?type=segment&url=" . b64_to_hex(base64_encode($abs));
     }
 
     header("Content-Type: application/vnd.apple.mpegurl");
@@ -181,7 +177,7 @@ if ($is_m3u8) {
 }
 
 // --------------------------------------------------------------------
-// Not a manifest → return the raw data with appropriate Content-Type
+// Not a manifest → return raw data with correct MIME type
 if ($type === 'key') {
     header("Content-Type: application/octet-stream");
 } elseif ($type === 'segment') {
