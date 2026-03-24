@@ -22,14 +22,26 @@ EPG_URL = "https://github.com/epgshare01/share/raw/master/epg_ripper_ALL_SOURCES
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def run_command(command):
-    logging.info(f"Running command: {command}")
+    """Runs a shell command and returns its stdout."""
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     if result.returncode != 0:
-        logging.error(f"Command failed with exit code {result.returncode}")
-        logging.error(f"Stderr: {result.stderr}")
+        logging.error(f"Command failed: {command}\nStderr: {result.stderr.strip()}")
     return result.stdout
 
+def is_stream_valid(stream_url, referrer):
+    """Checks if a stream URL is valid by fetching it and checking for #EXTM3U."""
+    logging.info(f"Validating stream: {stream_url}")
+    command = f'curl -L --connect-timeout 10 -m 15 --referer "{referrer}" "{stream_url}"'
+    content = run_command(command)
+    if content and content.strip().startswith("#EXTM3U") and "404 Not Found" not in content:
+        logging.info("Stream is valid.")
+        return True
+    else:
+        logging.warning(f"Stream is invalid or expired.")
+        return False
+
 def get_channel_links():
+    """Fetches all channel links from the CricHD homepage."""
     logging.info(f"Fetching channel links from {CRICHD_BASE_URL}")
     main_page_content = run_command(f"curl -L {CRICHD_BASE_URL}")
     if not main_page_content:
@@ -41,127 +53,79 @@ def get_channel_links():
     return channel_links
 
 def get_stream_link(channel_url):
-    logging.info(f"Fetching stream link for {channel_url}")
+    """Extracts the stream link and related info from a channel page."""
+    logging.info(f"Processing channel: {channel_url}")
     channel_page_content = run_command(f"curl -L {channel_url}")
     if not channel_page_content:
-        logging.error(f"Failed to fetch channel page: {channel_url}")
         return None, None, None
 
-    pattern_string = r"<a[^>]+href=['\"](" + PLAYER_DOMAIN_PATTERN + r"\?id=[^\'\"]+)['\"]"
+    pattern_string = r"<a[^>]+href=['"](" + PLAYER_DOMAIN_PATTERN + r"\?[^'"]*?id=[^'"]+)['"]"
     player_link_match = re.search(pattern_string, channel_page_content)
-
     if not player_link_match:
         logging.warning(f"Player link not found on {channel_url}")
         return None, None, None
 
     player_link = player_link_match.group(1)
-    player_id = player_link.split("id=")[1]
+    player_id = player_link.split("id=")[1].split("&")[0] # a bit more robust
     playerado_url = f"{PLAYERADO_EMBED_URL}?id={player_id}"
-    logging.info(f"Fetching embed page: {playerado_url}")
     
     embed_page_content = run_command(f"curl -L '{playerado_url}'")
     if not embed_page_content:
-        logging.error(f"Failed to fetch embed page: {playerado_url}")
         return None, None, None
 
     fid_match = re.search(r'fid\s*=\s*"([^"]+)"', embed_page_content)
-    v_con_match = re.search(r'v_con\s*=\s*"([^"]+)"', embed_page_content)
-    v_dt_match = re.search(r'v_dt\s*=\s*"([^"]+)"', embed_page_content)
-
-    if not (fid_match and v_con_match and v_dt_match):
-        logging.warning(f"Could not find all required variables on {playerado_url}")
+    if not fid_match:
+        logging.warning(f"Could not find 'fid' on {playerado_url}")
         return None, None, None
-
     fid = fid_match.group(1)
-    v_con = v_con_match.group(1)
-    v_dt = v_dt_match.group(1)
-
-    atplay_url = f"{ATPLAY_URL}?v={fid}&hello={v_con}&expires={v_dt}"
+    
+    atplay_url_params = f"?v={fid}" # Simplified, other params seem unnecessary for link structure
+    atplay_url = f"{ATPLAY_URL}{atplay_url_params}"
+    
     logging.info(f"Fetching atplay page: {atplay_url}")
-
-    atplay_page_content = run_command(f"curl -iL --user-agent \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\" --referer \"https://playerado.top/\" '{atplay_url}'")
+    atplay_page_content = run_command(f"curl -iL --user-agent \"Mozilla/5.0\" --referer \"https://playerado.top/\" '{atplay_url}'")
     if not atplay_page_content:
-        logging.error(f"Failed to fetch atplay page: {atplay_url}")
         return None, None, None
 
-    func_name_match = re.search(r'player\.load\({source: (\w+)\(\),', atplay_page_content)
-    if not func_name_match:
-        logging.warning(f"Could not find player.load function in {atplay_url}")
-        return None, None, None
-    func_name = func_name_match.group(1)
-    logging.info(f"Found player function: {func_name}")
-
-    func_def_pattern = r'function\s+' + func_name + r'\s*\(\)\s*\{(.*?)\}'
-    func_def_match = re.search(func_def_pattern, atplay_page_content, re.DOTALL)
-    if not func_def_match:
-        logging.warning(f"Could not find function definition for {func_name} in {atplay_url}")
-        return None, None, None
-    func_body = func_def_match.group(1)
-
-    base_url_var_match = re.search(r'var url = (\w+);', func_body)
-    md5_var_match = re.search(r'url \+= "\?md5="\s*\+\s*(\w+);', func_body)
-    expires_var_match = re.search(r'url \+= "&expires="\s*\+\s*(\w+);', func_body)
-    s_var_match = re.search(r'url \+= "&s="\s*\+\s*(\w+);', func_body)
-
-    if not (base_url_var_match and md5_var_match and expires_var_match and s_var_match):
-        logging.warning("Could not find all parameter vars in function body")
-        return None, None, None
-
-    base_url_var = base_url_var_match.group(1)
-    md5_var = md5_var_match.group(1)
-    expires_var = expires_var_match.group(1)
-    s_var = s_var_match.group(1)
-
-    md5_val_match = re.search(r'var ' + md5_var + r'\s*=\s*"(.*?)"', atplay_page_content)
-    expires_val_match = re.search(r'var ' + expires_var + r'\s*=\s*"(.*?)"', atplay_page_content)
-    s_val_match = re.search(r'var ' + s_var + r'\s*=\s*"(.*?)"', atplay_page_content)
-
-    if not (md5_val_match and expires_val_match and s_val_match):
-        logging.warning(f"Could not find values for all parameters in {atplay_url}")
-        return None, None, None
-
-    md5 = md5_val_match.group(1)
-    expires = expires_val_match.group(1)
-    s_val = s_val_match.group(1)
-
-    base_url_constructor_match = re.search(r'var ' + base_url_var + r'\s*=\s*(.*?);', atplay_page_content)
-    if not base_url_constructor_match:
-        logging.warning(f"Could not find constructor for base url var {base_url_var}")
-        return None, None, None
+    # Find the variables for md5, expires, and s
+    try:
+        md5 = re.search(r'var\s+md5\s*=\s*"(.*?)"', atplay_page_content).group(1)
+        expires = re.search(r'var\s+expires\s*=\s*"(.*?)"', atplay_page_content).group(1)
+        s_val = re.search(r'var\s+s\s*=\s*"(.*?)"', atplay_page_content).group(1)
         
-    constructor_string = base_url_constructor_match.group(1)
-    real_base_url_var = constructor_string.split('+')[0].strip()
-    
-    real_base_url_match = re.search(r"var " + real_base_url_var + r" = (.*?);", atplay_page_content)
-    if not real_base_url_match:
-        logging.warning(f"Could not find definition for real base url var {real_base_url_var}")
+        # Find the base URL construction
+        base_url_parts = re.findall(r"'([^']*)'", re.search(r"var\s+url\s*=\s*([^;]+);", atplay_page_content).group(1))
+        base_url = "".join(base_url_parts)
+    except AttributeError:
+        logging.warning(f"Could not extract all stream parameters from {atplay_url}")
         return None, None, None
-        
-    base_url_str_with_plus = real_base_url_match.group(1)
-    js_string_parts = re.findall(r"'(.*?)'", base_url_str_with_plus)
-    base_url = "".join(js_string_parts)
+
+    stream_path = f"/hls/{fid}.m3u8"
+    final_stream_link = f"{base_url}{stream_path}?md5={md5}&expires={expires}&ch={fid}&s={s_val}"
     
-    v_param = fid
-    stream_path = f"/hls/{v_param}.m3u8"
-    final_stream_link = f"{base_url}{stream_path}?md5={md5}&expires={expires}&ch={v_param}&s={s_val}"
-    
+    channel_name = "Unknown Channel"
     channel_name_match = re.search(r'<title>(.*?)</title>', channel_page_content)
-    channel_name = channel_name_match.group(1).split(" Live Streaming")[0] if channel_name_match else "Unknown Channel"
+    if channel_name_match:
+        channel_name = channel_name_match.group(1).split(" Live Streaming")[0]
 
-    logging.info(f"Successfully extracted stream for {channel_name}: {final_stream_link}")
+    logging.info(f"Extracted stream for {channel_name}")
     return channel_name, final_stream_link, "https://player0003.com/"
 
 
 if __name__ == "__main__":
     channel_links = get_channel_links()
     
-    channels_data = []
+    valid_channels = []
     for link in channel_links:
         name, stream, referrer = get_stream_link(link)
-        if name and stream:
-            channels_data.append((name, stream, referrer))
+        if name and stream and referrer:
+            if is_stream_valid(stream, referrer):
+                valid_channels.append((name, stream, referrer))
+            else:
+                logging.info(f"Skipping invalid or expired channel: {name}")
 
-    total_channels = len(channels_data)
+    total_channels = len(valid_channels)
+    
     if ZoneInfo:
         dhaka_tz = ZoneInfo('Asia/Dhaka')
         update_time = datetime.datetime.now(dhaka_tz).strftime('%Y-%m-%d %I:%M:%S %p')
@@ -173,7 +137,9 @@ if __name__ == "__main__":
         f.write(f'# Made by Siam3310\n')
         f.write(f'# Last updated: {update_time} (Bangladesh/Dhaka)\n')
         f.write(f'# Total channels: {total_channels}\n\n')
-        for name, stream, referrer in channels_data:
+        for name, stream, referrer in valid_channels:
             f.write(f'#EXTINF:-1 tvg-name="{name}",{name}\n')
             f.write(f"#EXTVLCOPT:http-referrer={referrer}\n")
             f.write(f"{stream}\n")
+    
+    logging.info(f"Playlist '{OUTPUT_M3U_FILE}' created successfully with {total_channels} valid channels.")
