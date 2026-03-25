@@ -20,8 +20,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def run_command(command):
     logging.info(f"Running command: {command}")
     try:
-        result = subprocess.run(command, capture_output=True, shell=True, check=True)
+        result = subprocess.run(command, capture_output=True, shell=True, check=True, timeout=20)
         return result.stdout.decode('utf-8', errors='ignore')
+    except subprocess.TimeoutExpired:
+        logging.error(f"Command timed out: {command}")
+        return None
     except subprocess.CalledProcessError as e:
         logging.error(f"Command failed: {e}\nStderr: {e.stderr.decode('utf-8', errors='ignore') if e.stderr else ''}")
         return None
@@ -30,6 +33,19 @@ def clean_channel_name(name):
     name = re.sub(r'(\s*Live Stream(ing)?|\s*-\s*CricHD|\s*US\s*-|\s*-\s*Free|\s*Watch|\s*HD|\s*-\s*PSL T20 On|\s*Play\s*-\s*01)', '', name, flags=re.IGNORECASE)
     return " ".join(name.split())
 
+def is_stream_working(stream_url, referrer):
+    """Checks if a stream URL returns a valid M3U8 playlist."""
+    if not stream_url:
+        return False
+    logging.info(f"Checking stream: {stream_url}")
+    command = f"curl -L -H 'Referer: {referrer}' --max-time 5 -s '{stream_url}' | head -n 1"
+    output = run_command(command)
+    if output and "#EXTM3U" in output:
+        logging.info(f"Stream is working: {stream_url}")
+        return True
+    logging.warning(f"Stream is not working or not an M3U8 playlist: {stream_url}")
+    return False
+
 # --- gocrichd.tv scraper functions ---
 
 def get_channel_links_go():
@@ -37,7 +53,7 @@ def get_channel_links_go():
     main_page_content = run_command(f"curl -L {CRICHD_GO_BASE_URL}/")
     if not main_page_content:
         return []
-    pattern = r'<div class="channels">\s*<a href="([^"]+)"'
+    pattern = r'<div class="channels">\s*<a href="([^\"]+)"'
     channel_links = re.findall(pattern, main_page_content)
     logging.info(f"Found {len(channel_links)} channel links from {CRICHD_GO_BASE_URL}")
     return list(dict.fromkeys(channel_links))
@@ -190,9 +206,14 @@ if __name__ == "__main__":
         if result and all(result):
             all_channels.append(result)
 
+    working_channels = []
+    for name, stream, referrer, category in all_channels:
+        if is_stream_working(stream, referrer):
+            working_channels.append((name, stream, referrer, category))
+
     unique_channels = []
     seen_names = set()
-    for name, stream, referrer, category in all_channels:
+    for name, stream, referrer, category in working_channels:
         if name not in seen_names:
             unique_channels.append((name, stream, referrer, category))
             seen_names.add(name)
@@ -218,4 +239,4 @@ if __name__ == "__main__":
             f.write(f"#EXTVLCOPT:http-referrer={referrer}\n")
             f.write(f"{stream}\n")
     
-    logging.info(f"Scraping complete. Found {total_channels} unique channels.")
+    logging.info(f"Scraping complete. Found {total_channels} unique, working channels.")
