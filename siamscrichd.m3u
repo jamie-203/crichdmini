@@ -1,113 +1,113 @@
 #EXTM3U x-tvg-url="https://github.com/epgshare01/share/raw/master/epg_ripper_ALL_SOURCES1.xml.gz"
 # Made by Siam3310
-# Last updated: 2026-03-27 08:00:19 PM (Bangladesh/Dhaka)
+# Last updated: 2026-03-27 08:47:26 PM (Bangladesh/Dhaka)
 # Total channels: 36
 
 #EXTINF:-1 tvg-name="A Sports" group-title="crichd1",A Sports
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/asportsd.m3u8?md5=qY8GTZGTc2OPLlOeQbshEA&expires=1774624768&ch=asportsd&s=fb106bc56967fc6d26a59d7a16c2f1fb
+https://dz2.bhalocast.com:7059/hls/asportsd.m3u8?md5=j71p2q06bLB2yfvQVOqE_A&expires=1774627599&ch=asportsd&s=1236806bbacd1d11a04bd164273cb708
 #EXTINF:-1 tvg-name="A Sports - Pakistan First Sports Channel" group-title="crichd2",A Sports - Pakistan First Sports Channel
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n14.sanwalyaarpya.com:1686/hls/asportshd.m3u8?md5=u3hcr1eC6E1xnUxEOFFOPQ&expires=1774627148
+https://n2.sanwalyaarpya.com:1686/hls/asportshd.m3u8?md5=9-gZlUTjV9_tqIBL7ZIDvg&expires=1774629987
 #EXTINF:-1 tvg-name="Astro Cricket" group-title="crichd1",Astro Cricket
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/astrocric.m3u8?md5=JyctQeJ6C1RX4uzxLLfsvQ&expires=1774624775&ch=astrocric&s=29240c9c01bcd3ae020457a95f23024a
+https://dz2.bhalocast.com:7059/hls/astrocric.m3u8?md5=S2rkvNzSRkHOlwYv15AEyA&expires=1774627604&ch=astrocric&s=28cd03e5f0289ba98e61c87a7fd483b1
 #EXTINF:-1 tvg-name="ESPN 2 Free" group-title="crichd2",ESPN 2 Free
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n7.sanwalyaarpya.com:1686/hls/espn2.m3u8?md5=O_rZ8YC9ybrPC8QgWKSqvg&expires=1774627150
+https://n7.sanwalyaarpya.com:1686/hls/espn2.m3u8?md5=kzfAR_VnO06Mz7Mgd7oN0Q&expires=1774629989
 #EXTINF:-1 tvg-name="Fox Sports Cricket" group-title="crichd1",Fox Sports Cricket
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/cf0sp1.m3u8?md5=gSXCu-hyK6vuhytm8tXU_Q&expires=1774624774&ch=cf0sp1&s=a70b0a2c73b2c2d11446be96ac884d19
+https://dz2.bhalocast.com:7059/hls/cf0sp1.m3u8?md5=P88tMMplfUT386xZ5gmXRA&expires=1774627603&ch=cf0sp1&s=8e621f8d8db7ddc51bc5a523fd02bad1
 #EXTINF:-1 tvg-name="Geo Super" group-title="crichd1",Geo Super
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/geosp.m3u8?md5=7xrEbGrIt5bY08MI1HulrA&expires=1774624771&ch=geosp&s=b662729da18e6bc5a7389c32167d84eb
+https://dz2.bhalocast.com:7059/hls/geosp.m3u8?md5=n57R0XCVgrUU4Nz-ES93Cw&expires=1774627601&ch=geosp&s=0be64616653fcc3a3ee5388480354d70
 #EXTINF:-1 tvg-name="LaLiga Sports TV - Live Sports Streaming." group-title="crichd2",LaLiga Sports TV - Live Sports Streaming.
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n9.sanwalyaarpya.com:1686/hls/laligauk.m3u8?md5=GTkiL57YQNK8fZJzjKJUvg&expires=1774627143
+https://n7.sanwalyaarpya.com:1686/hls/laligauk.m3u8?md5=h7kErnIwhbBBtJFgWOVp8g&expires=1774629983
 #EXTINF:-1 tvg-name="PTV Sports" group-title="crichd2",PTV Sports
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n4.sanwalyaarpya.com:1686/hls/ptvpk.m3u8?md5=k4L6hLTxccQmyYKzxqV2OA&expires=1774627144
+https://n8.sanwalyaarpya.com:1686/hls/ptvpk.m3u8?md5=KGEiuAVUHQJyIuGRbOaT5w&expires=1774629984
 #EXTINF:-1 tvg-name="Sky Sports" group-title="crichd2",Sky Sports
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n2.sanwalyaarpya.com:1686/hls/skyspnews.m3u8?md5=69DJVqfXHNmkmgiTmWcITw&expires=1774627137
+https://n9.sanwalyaarpya.com:1686/hls/skyspnews.m3u8?md5=2SAO14GojAmInRdfcYibDA&expires=1774629978
 #EXTINF:-1 tvg-name="Sky Sports Arena" group-title="crichd2",Sky Sports Arena
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n1.sanwalyaarpya.com:1686/hls/skysare.m3u8?md5=9ghUuqptHH4bL8xAXcEX5g&expires=1774627135
+https://n2.sanwalyaarpya.com:1686/hls/skysare.m3u8?md5=VEPDz-Z5KhfkGsG3t9mu8Q&expires=1774629977
 #EXTINF:-1 tvg-name="Sky Sports Cricket" group-title="crichd2",Sky Sports Cricket
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n14.sanwalyaarpya.com:1686/hls/skyscric.m3u8?md5=7iteP-9M8PutiyZm63Kqqg&expires=1774627133
+https://n5.sanwalyaarpya.com:1686/hls/skyscric.m3u8?md5=z6mmKwaPVF_L9wawljHN5g&expires=1774629975
 #EXTINF:-1 tvg-name="Sky Sports F1" group-title="crichd2",Sky Sports F1
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n4.sanwalyaarpya.com:1686/hls/skysfor1.m3u8?md5=Y2tQnk3124gDmtPAzgPc6A&expires=1774627136
+https://n4.sanwalyaarpya.com:1686/hls/skysfor1.m3u8?md5=oh4LAVicslvGW9E3xwv51Q&expires=1774629977
 #EXTINF:-1 tvg-name="Sky Sports Football" group-title="crichd2",Sky Sports Football
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n3.sanwalyaarpya.com:1686/hls/skysfott.m3u8?md5=uydcnaNWF-v-ZECR3ZGDhQ&expires=1774627135
+https://n4.sanwalyaarpya.com:1686/hls/skysfott.m3u8?md5=SwFGmA_agoUNQ-Bq9gXEag&expires=1774629977
 #EXTINF:-1 tvg-name="Sky Sports Golf" group-title="crichd2",Sky Sports Golf
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n9.sanwalyaarpya.com:1686/hls/skysgol.m3u8?md5=EZoR6kIn3rLAozUpl1j5Uw&expires=1774627134
+https://n7.sanwalyaarpya.com:1686/hls/skysgol.m3u8?md5=hMZtpdatVwj9Q224UTE7Rg&expires=1774629976
 #EXTINF:-1 tvg-name="Sky Sports Main Event" group-title="crichd2",Sky Sports Main Event
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n14.sanwalyaarpya.com:1686/hls/skysme.m3u8?md5=mg4nl1KGVtFl8D_gTIg1zg&expires=1774627132
+https://n1.sanwalyaarpya.com:1686/hls/skysme.m3u8?md5=MWCF0qHj6zDrgJLtK3HSng&expires=1774629974
 #EXTINF:-1 tvg-name="Sky Sports Mix" group-title="crichd2",Sky Sports Mix
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n6.sanwalyaarpya.com:1686/hls/skysmixx.m3u8?md5=ibZQ7m3NwaL-WAMM-T9rPw&expires=1774627137
+https://n4.sanwalyaarpya.com:1686/hls/skysmixx.m3u8?md5=ntQwcueKiP1KQbEPIKrOBg&expires=1774629978
 #EXTINF:-1 tvg-name="Sky Sports Premier League" group-title="crichd2",Sky Sports Premier League
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n4.sanwalyaarpya.com:1686/hls/skysprem.m3u8?md5=AunUz40LjzZ2aITcKEEpKA&expires=1774627134
+https://n2.sanwalyaarpya.com:1686/hls/skysprem.m3u8?md5=yAj8LpsiOxuU2IP_BppL-A&expires=1774629976
 #EXTINF:-1 tvg-name="Sky Sports Tennis" group-title="crichd2",Sky Sports Tennis
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n4.sanwalyaarpya.com:1686/hls/skystennis.m3u8?md5=ucxSyJ_TyrEpuujsKjVvOw&expires=1774627138
+https://n6.sanwalyaarpya.com:1686/hls/skystennis.m3u8?md5=CQ7H00tUaqWmDxPyfrsqvQ&expires=1774629979
 #EXTINF:-1 tvg-name="Sony Sports Ten 1" group-title="crichd1",Sony Sports Ten 1
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/ten1co.m3u8?md5=uYNFuOsSTFhA1QVX6u8vMg&expires=1774624778&ch=ten1co&s=d2e647dc50add42907aea85d68e70d77
+https://dz2.bhalocast.com:7059/hls/ten1co.m3u8?md5=5YiipVyiugWFajVowb9akA&expires=1774627607&ch=ten1co&s=91d7752dbe5b14000755891ec085800b
 #EXTINF:-1 tvg-name="Sony Sports Ten 3" group-title="crichd1",Sony Sports Ten 3
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/ten3sd.m3u8?md5=P1w4G88PtGkuYQOKBVA0yQ&expires=1774624781&ch=ten3sd&s=29b3089cbff7823198897a4754172d56
+https://dz2.bhalocast.com:7059/hls/ten3sd.m3u8?md5=OUBt2zV6Gg81xDLoYrSZRQ&expires=1774627610&ch=ten3sd&s=02277ed3ee7ca8d700ffefc0a229777c
 #EXTINF:-1 tvg-name="Sony Sports Ten 5" group-title="crichd1",Sony Sports Ten 5
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/sonyssix.m3u8?md5=nl55PYwpleNBBU4Edx88cQ&expires=1774624777&ch=sonyssix&s=6102c598d3d82fcd2707b92a4320d6bd
+https://dz2.bhalocast.com:7059/hls/sonyssix.m3u8?md5=61P7-AI-brtl6LPyX7BT-Q&expires=1774627606&ch=sonyssix&s=9935ac9fc4a7535dc6fc735f51abbae1
 #EXTINF:-1 tvg-name="Star Sports 1" group-title="crichd1",Star Sports 1
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/str1crows.m3u8?md5=96D3pQkqPBSZXLw0nDGG_w&expires=1774624763&ch=str1crows&s=ac47d2cd61aa4e72e71493cf0d8ccf75
+https://dz2.bhalocast.com:7059/hls/str1crows.m3u8?md5=52ptGwtHKnZ_8-Utl0Xg_A&expires=1774627594&ch=str1crows&s=a2909c2d2b7d406c0eb51d02a0fe2fe9
 #EXTINF:-1 tvg-name="Star Sports 1 Hindi" group-title="crichd2",Star Sports 1 Hindi
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n4.sanwalyaarpya.com:1686/hls/starhindi.m3u8?md5=0qzBgiwfeUPySF29ZD9SKA&expires=1774627147
+https://n4.sanwalyaarpya.com:1686/hls/starhindi.m3u8?md5=k4FY9WI8ZfX-xHV9sXF0YQ&expires=1774629986
 #EXTINF:-1 tvg-name="Star Sports 2" group-title="crichd2",Star Sports 2
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n8.sanwalyaarpya.com:1686/hls/star2in.m3u8?md5=l8JM328c8Kywz5Brwq0-dQ&expires=1774627147
+https://n14.sanwalyaarpya.com:1686/hls/star2in.m3u8?md5=9pxy4tg5GLq8NHCV139Z6g&expires=1774629986
 #EXTINF:-1 tvg-name="Star Sports Hindi" group-title="crichd1",Star Sports Hindi
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/str1crowshi.m3u8?md5=JSie82ytjgZ09bttnCrHPA&expires=1774624764&ch=str1crowshi&s=e9fea7a445575c091ec7a6dcd452856e
+https://dz2.bhalocast.com:7059/hls/str1crowshi.m3u8?md5=nZFw66dkRGhJ9wzLBN8Ufw&expires=1774627596&ch=str1crowshi&s=efae52fdb3015f85cc9f0f454c9ccccb
 #EXTINF:-1 tvg-name="Stream Live Cricket on Willow Tv" group-title="crichd2",Stream Live Cricket on Willow Tv
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n8.sanwalyaarpya.com:1686/hls/willowextra.m3u8?md5=GtGnB6ZZV4pwdAYIq-Ttew&expires=1774627148
+https://n2.sanwalyaarpya.com:1686/hls/willowextra.m3u8?md5=UVRdIPqgb50jYRbuDLGJiw&expires=1774629987
 #EXTINF:-1 tvg-name="SuperSport Cricket" group-title="crichd1",SuperSport Cricket
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/sscric.m3u8?md5=X05pMwPOmoAMrwCJFt1zHw&expires=1774624785&ch=sscric&s=8d33a82f1b5d5ceb2041a96eb52b520d
+https://dz2.bhalocast.com:7059/hls/sscric.m3u8?md5=5Iut5VfGR6YHGG7Qr3uFmw&expires=1774627612&ch=sscric&s=c1fa1b0d2e625549b0cd25c0249ca2c3
 #EXTINF:-1 tvg-name="TNT Sports 1" group-title="crichd2",TNT Sports 1
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n6.sanwalyaarpya.com:1686/hls/bbtsp1.m3u8?md5=mhH29j8Xc8QQqJuVSiUvww&expires=1774627138
+https://n9.sanwalyaarpya.com:1686/hls/bbtsp1.m3u8?md5=h1EYtkA3ZW2UWOj_p9H4mg&expires=1774629979
 #EXTINF:-1 tvg-name="TNT Sports 2" group-title="crichd2",TNT Sports 2
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n4.sanwalyaarpya.com:1686/hls/bbtsp2.m3u8?md5=Y1DYzjSjkuWlUZjS5whLDg&expires=1774627139
+https://n5.sanwalyaarpya.com:1686/hls/bbtsp2.m3u8?md5=ZciKWdj6eulKhniVkI9Yfw&expires=1774629980
 #EXTINF:-1 tvg-name="TNT Sports 3" group-title="crichd2",TNT Sports 3
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n8.sanwalyaarpya.com:1686/hls/bbtsp3.m3u8?md5=EK8xaucFR7IqHbYzOIHdww&expires=1774627139
+https://n6.sanwalyaarpya.com:1686/hls/bbtsp3.m3u8?md5=CFY8djWTJSqoNvMwtV1DSw&expires=1774629980
 #EXTINF:-1 tvg-name="TNT Sports 4" group-title="crichd2",TNT Sports 4
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n3.sanwalyaarpya.com:1686/hls/bbtespn.m3u8?md5=5Gq_6Yhrwev87zUxp1AMIQ&expires=1774627140
+https://n3.sanwalyaarpya.com:1686/hls/bbtespn.m3u8?md5=eNQUUUDmFNmXzK047MzBMg&expires=1774629981
 #EXTINF:-1 tvg-name="Ten Sports" group-title="crichd1",Ten Sports
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/tensp.m3u8?md5=92xj8ixk7eTm9BJRiTu3uA&expires=1774624769&ch=tensp&s=49a47f5170eff83465f529a4a24d610d
+https://dz2.bhalocast.com:7059/hls/tensp.m3u8?md5=hornGhbDJ3zU3osnQwZPAA&expires=1774627600&ch=tensp&s=e44f8d00bc34b82f1f7e956237bdd9f9
 #EXTINF:-1 tvg-name="Viaplay Sports 2" group-title="crichd2",Viaplay Sports 2
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n7.sanwalyaarpya.com:1686/hls/hdchnl2.m3u8?md5=iXO0OsNmqQ6MBT5MFgAA2g&expires=1774627142
+https://n3.sanwalyaarpya.com:1686/hls/hdchnl2.m3u8?md5=-hBNpbOfJ09WbGMhr2ekqA&expires=1774629982
 #EXTINF:-1 tvg-name="Willow 2" group-title="crichd1",Willow 2
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/dxwillo2.m3u8?md5=ukvOm7FnV-uoENkl6oyIUg&expires=1774624762&ch=dxwillo2&s=eba59e534908d7fd160368f39eb3eae5
+https://dz2.bhalocast.com:7059/hls/dxwillo2.m3u8?md5=EkIZoDlmcPIPWABWzUlfyw&expires=1774627593&ch=dxwillo2&s=6ae965b79a202a04e4e65a1d21f9d4d3
 #EXTINF:-1 tvg-name="Willow Cricket" group-title="crichd1",Willow Cricket
 #EXTVLCOPT:http-referrer=https://player0003.com/
-https://dz2.bhalocast.com:7059/hls/dxdwillo.m3u8?md5=wEs02SVmPEgg2LaMRWFoiQ&expires=1774624759&ch=dxdwillo&s=74d6c826593d3cc3a623f51cbea404ec
+https://dz2.bhalocast.com:7059/hls/dxdwillohd.m3u8?md5=B3NcJVx3QJgU-zsfAoII_A&expires=1774627592&ch=dxdwillohd&s=fdbd02d378c2206c2a595793c31f286e
 #EXTINF:-1 tvg-name="Willow Cricket Usa Live Streaming" group-title="crichd2",Willow Cricket Usa Live Streaming
 #EXTVLCOPT:http-referrer=https://profamouslife.com/
-https://n4.sanwalyaarpya.com:1686/hls/willowusa.m3u8?md5=VsDncD6rEGIAXZDTiSSK_Q&expires=1774627145
+https://n7.sanwalyaarpya.com:1686/hls/willowusa.m3u8?md5=3AsdeUwt8SGuCY1HgfdNzQ&expires=1774629985
