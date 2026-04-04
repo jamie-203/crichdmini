@@ -33,17 +33,12 @@ def clean_channel_name(name):
     name = re.sub(r'(\s*Live Stream(ing)?|\s*-\s*CricHD|\s*US\s*-|\s*-\s*Free|\s*Watch|\s*HD|\s*-\s*PSL T20 On|\s*Play\s*-\s*01)', '', name, flags=re.IGNORECASE)
     return " ".join(name.split())
 
-def is_stream_working(stream_url, referrer):
-    if not stream_url:
-        return False
-    logging.info(f"Checking stream: {stream_url}")
-    command = f"curl -L -H 'Referer: {referrer}' --max-time 5 -s '{stream_url}' | head -n 1"
-    output = run_command(command)
-    if output and "#EXTM3U" in output:
-        logging.info(f"Stream is working: {stream_url}")
-        return True
-    logging.warning(f"Stream is not working or not an M3U8 playlist: {stream_url}")
-    return False
+def get_category(channel_name):
+    cricket_keywords = ['cricket', 'cric', 'ten sports', 'ptv sports', 'a sports', 'willow', 'geo super']
+    for keyword in cricket_keywords:
+        if keyword in channel_name.lower():
+            return "Cricket"
+    return "Sports"
 
 # --- gocrichd.tv scraper functions ---
 
@@ -110,7 +105,7 @@ def get_stream_link_go(channel_url):
     raw_name = channel_name_match.group(1).split("|")[0].strip() if channel_name_match else "Unknown Channel"
     channel_name = clean_channel_name(raw_name)
 
-    return channel_name, stream_url, "https://executeandship.com/", "crichd2"
+    return channel_name, stream_url, "https://executeandship.com/", get_category(channel_name)
 
 # --- crichd.com.co scraper functions ---
 
@@ -183,7 +178,7 @@ def get_stream_link_crichd(channel_url):
     raw_name = channel_name_match.group(1).split(" Live Streaming")[0].strip() if channel_name_match else "Unknown Channel"
     channel_name = clean_channel_name(raw_name)
 
-    return channel_name, stream_url, "https://player0003.com/", "crichd1"
+    return channel_name, stream_url, "https://player0003.com/", get_category(channel_name)
 
 
 # --- Main Execution ---
@@ -203,14 +198,9 @@ if __name__ == "__main__":
         if result and all(result):
             all_channels.append(result)
 
-    working_channels = []
-    for name, stream, referrer, category in all_channels:
-        if is_stream_working(stream, referrer):
-            working_channels.append((name, stream, referrer, category))
-
     unique_channels = []
     seen_names = set()
-    for name, stream, referrer, category in working_channels:
+    for name, stream, referrer, category in all_channels:
         if name not in seen_names:
             unique_channels.append((name, stream, referrer, category))
             seen_names.add(name)
@@ -231,7 +221,7 @@ if __name__ == "__main__":
         f.write(f'# Made by Siam3310\n')
         f.write(f'# Last updated: {update_time} (Bangladesh/Dhaka)\n')
         f.write(f'# Total channels: {total_channels}\n\n')
-        for name, stream, referrer, category in sorted(unique_channels):
+        for name, stream, referrer, category in sorted(unique_channels, key=lambda x: (x[3], x[0])):
             f.write(f'#EXTINF:-1 tvg-name="{name}" group-title="{category}",{name}\n')
             f.write(f"#EXTVLCOPT:http-referrer={referrer}\n")
             f.write(f"{stream}\n")
