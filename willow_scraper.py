@@ -122,7 +122,7 @@ def is_stream_working(stream_url):
     """Checks if a stream URL is a valid and working M3U8 playlist."""
     logging.info(f"--- Step 3: Verifying stream: {stream_url} ---")
     try:
-        response = scraper.get(stream_url, headers={'Referer': FINAL_REFERRER}, timeout=10)
+        response = scraper.get(stream_url, headers={'Referer': FINAL_REFERRER}, timeout=15)
         if response.status_code == 200 and '#EXTM3U' in response.text:
             logging.info(" -> Stream is VALID.")
             return True
