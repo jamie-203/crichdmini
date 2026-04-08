@@ -6,7 +6,6 @@ import sys
 
 # --- Configuration ---
 INITIAL_URL = "https://streamcrichd.com/update/willowcricket.php"
-# Per your instruction, this referrer will be used for ALL requests.
 STRICT_REFERRER = "https://streamcrichd.com/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
 REQUESTS_TIMEOUT = 15
@@ -18,80 +17,64 @@ logging.basicConfig(
     stream=sys.stdout
 )
 
-def get_page_content(url, referrer=None):
-    """Fetches content for a given URL using the requests library."""
-    logging.info(f"Fetching URL: {url}")
-    headers = {
-        'User-Agent': USER_AGENT,
-        'Referer': referrer
-    }
-    try:
-        response = requests.get(url, headers=headers, timeout=REQUESTS_TIMEOUT)
-        response.raise_for_status()
-        return response.text
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching {url}: {e}")
-        return None
-
 def extract_willow_stream():
     """
-    Follows the chain of requests and script executions to find the final
-    HLS stream URL for the Willow Cricket channel.
+    Uses a requests.Session to mimic a browser session, handling cookies
+    and headers consistently to bypass anti-scraping measures.
     """
-    # Step 1: Get the initial page
-    logging.info("--- Step 1: Fetching initial page ---")
-    initial_content = get_page_content(INITIAL_URL, referrer=STRICT_REFERRER)
-    if not initial_content:
-        logging.error("Failed to fetch initial page. Aborting.")
-        return None
+    logging.info("--- Creating a new browser session ---")
+    with requests.Session() as session:
+        session.headers.update({
+            'User-Agent': USER_AGENT,
+            'Referer': STRICT_REFERRER
+        })
 
-    # Step 2: Find and fetch the premium.js script
-    logging.info("--- Step 2: Fetching premium.js script ---")
-    premium_js_match = re.search(r'src="(//executeandship.com/premium.js)"', initial_content)
-    if not premium_js_match:
-        logging.error("Could not find 'premium.js' script in the initial page. Aborting.")
-        return None
+        try:
+            logging.info("--- Step 1: Fetching initial page ---")
+            initial_response = session.get(INITIAL_URL, timeout=REQUESTS_TIMEOUT)
+            initial_response.raise_for_status()
+            initial_content = initial_response.text
 
-    premium_js_url = "https:" + premium_js_match.group(1)
-    premium_js_content = get_page_content(premium_js_url, referrer=STRICT_REFERRER)
-    if not premium_js_content:
-        logging.error("Failed to fetch premium.js content. Aborting.")
-        return None
+            logging.info("--- Step 2: Fetching premium.js script ---")
+            # Correct, robust regex using back-referencing for quotes.
+            premium_js_match = re.search(r'src=(["\'])//executeandship.com/premium.js\1', initial_content)
+            if not premium_js_match:
+                logging.error("Could not find \'premium.js\' script. Aborting.")
+                return None
 
-    # Step 3: Extract the iframe URL from the premium.js content
-    logging.info("--- Step 3: Extracting iframe URL ---")
-    fid_match = re.search(r'fid="([^"]+)"', initial_content)
-    if not fid_match:
-        logging.error("Could not find 'fid' in the initial page. Aborting.")
-        return None
-    fid = fid_match.group(1)
-    iframe_url = f"https://executeandship.com/premiumcr.php?player=desktop&live={fid}"
+            premium_js_url = "https:" + "//executeandship.com/premium.js"
+            session.get(premium_js_url, timeout=REQUESTS_TIMEOUT).raise_for_status()
 
-    # Step 4: Fetch the iframe content (the player page)
-    logging.info("--- Step 4: Fetching player iframe page ---")
-    player_page_content = get_page_content(iframe_url, referrer=STRICT_REFERRER)
-    if not player_page_content:
-        logging.error("Failed to fetch player page content. Aborting.")
-        return None
+            logging.info("--- Step 3: Extracting iframe URL ---")
+            # Correct, robust regex using back-referencing for quotes.
+            fid_match = re.search(r'fid=(["\'])([^"\']+)\1', initial_content)
+            if not fid_match:
+                logging.error("Could not find \'fid\' in the initial page. Aborting.")
+                return None
 
-    # Step 5: Extract the obfuscated stream URL
-    logging.info("--- Step 5: Extracting final stream URL ---")
-    stream_array_match = re.search(r'return \(\[(.*?)\]\.join', player_page_content, re.DOTALL)
-    if not stream_array_match:
-        logging.error("Could not find the stream URL array in the player page. Aborting.")
-        return None
+            fid = fid_match.group(2)
+            iframe_url = f"https://executeandship.com/premiumcr.php?player=desktop&live={fid}"
 
-    char_list_str = stream_array_match.group(1)
-    # Use regex to reliably extract all characters from the JavaScript array
-    char_list = re.findall(r'"([^"]*)"', char_list_str)
-    
-    # Join the characters to form the URL
-    final_url = "".join(char_list)
-    # The result contains escaped slashes (\/), so we must replace them
-    final_url = final_url.replace("\\/", "/")
+            logging.info("--- Step 4: Fetching player iframe page ---")
+            player_page_response = session.get(iframe_url, timeout=REQUESTS_TIMEOUT)
+            player_page_response.raise_for_status()
+            player_page_content = player_page_response.text
 
-    return final_url
+            logging.info("--- Step 5: Extracting final stream URL ---")
+            stream_array_match = re.search(r"return \(\[(.*?)\]\.join", player_page_content, re.DOTALL)
+            if not stream_array_match:
+                logging.error("Could not find the stream URL array. Aborting.")
+                return None
 
+            char_list_str = stream_array_match.group(1)
+            char_list = re.findall(r'"([^"]*)"', char_list_str)
+            final_url = "".join(char_list).replace("\\/", "/")
+
+            return final_url
+
+        except requests.exceptions.RequestException as e:
+            logging.error(f"A network error occurred: {e}")
+            return None
 
 if __name__ == "__main__":
     logging.info("--- STARTING WILLOW CRICKET STREAM EXTRACTOR ---")
