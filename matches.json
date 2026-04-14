@@ -42,6 +42,15 @@
         ]
     },
     {
+        "title": "ATP / WTA: Barcelona / Munich / Rouen / Stuttgart",
+        "competition": "ATP Tour",
+        "status": "Upcoming",
+        "match_url": "https://vf.crichd.tv/atp-wta-barcelona-munich-rouen-stuttgart-live-streaming",
+        "channels": [
+            "Sky Sports Main Event"
+        ]
+    },
+    {
         "title": "Barrow vs Oldham Athletic",
         "competition": "English Championship",
         "status": "Upcoming",
@@ -114,12 +123,39 @@
         ]
     },
     {
+        "title": "Atletico Madrid vs Barcelona",
+        "competition": "UEFA Champions League",
+        "status": "Upcoming",
+        "match_url": "https://vf.crichd.tv/atletico-madrid-vs-barcelona-live-streaming",
+        "channels": [
+            "TNT Sports 1"
+        ]
+    },
+    {
         "title": "RCB vs Lucknow Super Giants",
         "competition": "IPL T20",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/rcb-vs-lucknow-super-giants-live-streaming",
         "channels": [
             "Sky Sports  Cricket"
+        ]
+    },
+    {
+        "title": "Arsenal vs Sporting CP",
+        "competition": "UEFA Champions League",
+        "status": "Upcoming",
+        "match_url": "https://vf.crichd.tv/arsenal-vs-sporting-cp-live-streaming",
+        "channels": [
+            "TNT Sports 1"
+        ]
+    },
+    {
+        "title": "Bayern Munich vs Real Madrid",
+        "competition": "UEFA Champions League",
+        "status": "Upcoming",
+        "match_url": "https://vf.crichd.tv/bayern-munich-vs-real-madrid-live-streaming",
+        "channels": [
+            "TNT Sports 2"
         ]
     },
     {
@@ -262,27 +298,35 @@
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/hurricanes-vs-brumbies-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Blues vs Reds",
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/blues-vs-reds-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Highlanders vs Moana Pasifika",
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/highlanders-vs-moana-pasifika-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Chiefs vs Fijian Drua",
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/chiefs-vs-fijian-drua-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     }
 ]
