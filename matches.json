@@ -171,42 +171,54 @@
         "competition": "English Championship",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/millwall-vs-queens-park-rangers-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Portsmouth vs Leicester City",
         "competition": "English Championship",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/portsmouth-vs-leicester-city-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Swindon Town vs Accrington Stanley",
         "competition": "English Championship",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/swindon-town-vs-accrington-stanley-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Western Force vs Crusaders",
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/western-force-vs-crusaders-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports  Action"
+        ]
     },
     {
         "title": "Sunrisers Hyderabad vs Chennai Super Kings",
         "competition": "IPL T20",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/sunrisers-hyderabad-vs-chennai-super-kings-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports  Cricket"
+        ]
     },
     {
         "title": "Eintracht Frankfurt vs RB Leipzig",
         "competition": "Bundesliga",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/eintracht-frankfurt-vs-rb-leipzig-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Football"
+        ]
     },
     {
         "title": "Tottenham Hotspur vs Brighton and Hove Albion",
