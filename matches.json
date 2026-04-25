@@ -261,20 +261,26 @@
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/highlanders-vs-waratahs-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Moana Pasifika vs Hurricanes",
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/moana-pasifika-vs-hurricanes-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Brumbies vs Western Force",
         "competition": "",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/brumbies-vs-western-force-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     }
 ]
