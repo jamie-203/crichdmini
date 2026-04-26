@@ -41,15 +41,6 @@
         ]
     },
     {
-        "title": "Chelsea vs Leeds United",
-        "competition": "English Fa Cup",
-        "status": "Live",
-        "match_url": "https://vf.crichd.tv/chelsea-vs-leeds-united-live-streaming",
-        "channels": [
-            "TNT Sports 1"
-        ]
-    },
-    {
         "title": "Real Oviedo vs Elche",
         "competition": "Spanish La Liga",
         "status": "Live",
@@ -70,7 +61,7 @@
     {
         "title": "Hibernian vs Hearts",
         "competition": "Scottish Premier League",
-        "status": "Upcoming",
+        "status": "Live",
         "match_url": "https://vf.crichd.tv/hibernian-vs-hearts-live-streaming",
         "channels": [
             "Sky Sports Football"
@@ -90,49 +81,63 @@
         "competition": "ATP Tour",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/atpwta-1000-madrid-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Tennis"
+        ]
     },
     {
         "title": "AC Milan vs Juventus",
         "competition": "Spanish La Liga",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/ac-milan-vs-juventus-live-streaming",
-        "channels": []
+        "channels": [
+            "TNT Sports 1"
+        ]
     },
     {
         "title": "Villarreal vs Celta Vigo",
         "competition": "Spanish La Liga",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/villarreal-vs-celta-vigo-live-streaming",
-        "channels": []
+        "channels": [
+            "Viaplay Sports 1"
+        ]
     },
     {
         "title": "Dehli Capitals vs RCB",
         "competition": "IPL T20",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/dehli-capitals-vs-rcb-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports  Cricket"
+        ]
     },
     {
         "title": "Manchester United vs Brentford",
         "competition": "English Premier League",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/manchester-united-vs-brentford-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Punjab Kings vs Rajastan Royals",
         "competition": "IPL T20",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/punjab-kings-vs-rajastan-royals-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports  Cricket"
+        ]
     },
     {
         "title": "Northampton Town vs Barnsley",
         "competition": "English Championship",
         "status": "Upcoming",
         "match_url": "https://vf.crichd.tv/northampton-town-vs-barnsley-live-streaming",
-        "channels": []
+        "channels": [
+            "Sky Sports Main Event"
+        ]
     },
     {
         "title": "Peterborough United vs Mansfield Town",
